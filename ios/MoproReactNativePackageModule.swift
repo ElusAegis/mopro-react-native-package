@@ -1,4 +1,41 @@
 import ExpoModulesCore
+import moproFFI
+
+func convertType(proof: CircomProof) -> ExpoProof {
+  var a = ExpoG1()
+  a.x = proof.a.x
+  a.y = proof.a.y
+
+  var b = ExpoG2()
+  b.x = proof.b.x
+  b.y = proof.b.y
+
+  var c = ExpoG1()
+  c.x = proof.c.x
+  c.y = proof.c.y
+
+  var expoProof = ExpoProof()
+  expoProof.a = a
+  expoProof.b = b
+  expoProof.c = c
+  return expoProof
+}
+
+func generateProof(zkeyPath: String, circuitInputs: String) -> Result {
+  do {
+    let res = try generateCircomProof(
+      zkeyPath: zkeyPath, circuitInputs: circuitInputs, proofLib: ProofLib.arkworks)
+    let result = Result()
+    result.inputs = res.inputs
+    result.proof = convertType(proof: res.proof)
+    return result
+  } catch {
+    print("Error: \(error)")
+    let result = Result()
+    result.inputs = [error.localizedDescription]
+    return result
+  }
+}
 
 public class MoproReactNativePackageModule: Module {
   // Each module class must implement the definition function. The definition consists of components
@@ -23,13 +60,22 @@ public class MoproReactNativePackageModule: Module {
       return "Hello world! 👋"
     }
 
+    Function("generateCircomProof") {
+      (zkeyPath: String, circuitInputs: String) -> Result in
+
+      // Call into the compiled static library
+      return generateProof(zkeyPath: zkeyPath, circuitInputs: circuitInputs)
+    }
+
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
     AsyncFunction("setValueAsync") { (value: String) in
       // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+      self.sendEvent(
+        "onChange",
+        [
+          "value": value
+        ])
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the

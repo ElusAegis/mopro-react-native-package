@@ -10,6 +10,9 @@ class MoproReactNativePackageModule extends NativeModule<MoproReactNativePackage
   hello() {
     return 'Hello world! 👋';
   }
+  generateCircomProof(zkeyPath: string, circuitInputs: string) {
+    throw new Error('Not implemented on web');
+  }
 }
 
 export default registerWebModule(MoproReactNativePackageModule);

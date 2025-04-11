@@ -2,4 +2,4 @@
 // and on native platforms to MoproReactNativePackageModule.ts
 export { default } from './MoproReactNativePackageModule';
 export { default as MoproReactNativePackageView } from './MoproReactNativePackageView';
-export * from  './MoproReactNativePackage.types';
+export * from './MoproReactNativePackage.types';

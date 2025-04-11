@@ -17,3 +17,28 @@ export type MoproReactNativePackageViewProps = {
   onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
   style?: StyleProp<ViewStyle>;
 };
+
+// Define the G1 type
+export type G1 = {
+  x: string;
+  y: string;
+}
+
+// Define the G2 type
+export type G2 = {
+  x: string[];
+  y: string[];
+}
+
+// Define the ProofCalldata type
+export type ProofCalldata = {
+  a: G1;
+  b: G2;
+  c: G1;
+}
+// Define the Result type
+export type Result = {
+  proof: ProofCalldata;
+  inputs: string[];
+}
+

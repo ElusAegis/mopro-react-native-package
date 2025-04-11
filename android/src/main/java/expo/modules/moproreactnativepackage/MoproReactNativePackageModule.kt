@@ -2,7 +2,27 @@ package expo.modules.moproreactnativepackage
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.moproreactnativepackage.ExpoProof
 import java.net.URL
+import java.io.File
+import uniffi.mopro.CircomProof
+import uniffi.mopro.generateCircomProof
+import uniffi.mopro.ProofLib
+
+fun convertType(proof: CircomProof): ExpoProof {
+  var a = ExpoG1(proof.a.x, proof.a.y)
+  var b = ExpoG2(proof.b.x, proof.b.y)
+  var c = ExpoG1(proof.c.x, proof.c.y)
+  var output = ExpoProof(a, b, c)
+  return output
+}
+
+fun generateProof(zkeyPath: String, circuitInputs: String): Result {
+  val file = File(zkeyPath)
+  val res = generateCircomProof(file.absolutePath, circuitInputs, ProofLib.ARKWORKS)
+  val result = Result(convertType(res.proof), res.inputs)
+  return result
+}
 
 class MoproReactNativePackageModule : Module() {
   // Each module class must implement the definition function. The definition consists of components
@@ -25,6 +45,10 @@ class MoproReactNativePackageModule : Module() {
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
     Function("hello") {
       "Hello world! 👋"
+    }
+
+    Function("generateCircomProof") { zkeyPath: String, circuitInputs: String ->
+      generateProof(zkeyPath, circuitInputs)
     }
 
     // Defines a JavaScript function that always returns a Promise and whose native code
