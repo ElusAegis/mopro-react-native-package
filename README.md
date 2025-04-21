@@ -4,20 +4,20 @@
  
  > Mopro handles circuit compilation, Rust ↔︎ mobile bindings, and multi‑proof back‑ends so you can focus on building privacy‑preserving features.
 
- 
- ## How to Import the Package
- Use a Node.js package manager in your React Native app to install dependencies. For example:
- ```sh
- # npm
- npm install https://github.com/zkmopro/mopro-react-native-package
- # yarn / pnpm
- yarn add https://github.com/zkmopro/mopro-react-native-package
- ```
 
- Alternatively, you can manually add it to your package.json:
- ```json
- "dependencies": {
-  "mopro-react-native-package": "github:zkmopro/mopro-react-native-package",
+## How to Import the Package
+Use a Node.js package manager in your React Native app to install dependencies. For example:
+```sh
+# npm
+npm install https://github.com/zkmopro/mopro-react-native-package
+# yarn / pnpm
+yarn add https://github.com/zkmopro/mopro-react-native-package
+```
+
+Alternatively, you can manually add it to your package.json:
+```json
+"dependencies": {
+ "mopro-react-native-package": "github:zkmopro/mopro-react-native-package",
 }
 ```
 
@@ -32,12 +32,19 @@ const circuitInputs = {
     b: [b],
 };
 
-const res: Result = MoproReactNativePackage.generateCircomProof(
+const proofResult: CircomProofResult = MoproReactNativePackage.generateCircomProof(
     ZKEY_PATH,
     JSON.stringify(circuitInputs)
 );
+
+const isValid: boolean = await MoproReactNativePackage.verifyProof(
+    ZKEY_PATH,
+    parsedProofResult
+);
+
+console.log('Proof verification result:', isValid);
  
- ```
+```
 
 > [!WARNING]  
 > The default bindings are built specifically for the `multiplier2` circom circuit. If you'd like to update the circuit or switch to a different proving scheme, please refer to the [How to Build the Package](#how-to-build-the-package) section.<br/>
@@ -47,8 +54,8 @@ const res: Result = MoproReactNativePackage.generateCircomProof(
 
 ## Running on a real device
 
-Since this is a native module, you’ll need to use Expo's build commands to run it on a device.
-We’ve included an example app in the example folder to help you get started and test:
+Since this is a native module, you'll need to use Expo's build commands to run it on a device. Notice that, it is not available for Web yet.
+We've included an example app in the example folder to help you get started and test:
 
 ```sh
 cd example
