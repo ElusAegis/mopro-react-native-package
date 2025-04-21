@@ -22,12 +22,14 @@ export type MoproReactNativePackageViewProps = {
 export type G1 = {
   x: string;
   y: string;
+  z: string;
 }
 
 // Define the G2 type
 export type G2 = {
   x: string[];
   y: string[];
+  z: string[];
 }
 
 // Define the ProofCalldata type
@@ -35,10 +37,27 @@ export type ProofCalldata = {
   a: G1;
   b: G2;
   c: G1;
+  inputs: string[];
 }
+
 // Define the Result type
 export type Result = {
   proof: ProofCalldata;
   inputs: string[];
 }
+
+// --- Added based on native CircomProofResult ---
+export interface CircomProof {
+  a: G1;
+  b: G2;
+  c: G1;
+  protocol: string;
+  curve: string;
+}
+
+export interface CircomProofResult {
+  proof: CircomProof;
+  inputs: string[];
+}
+// --- End added types ---
 
