@@ -23,8 +23,16 @@ export default function HomeScreen() {
 
     async function ensureZkeyExists() {
         const fileInfo = await FileSystem.getInfoAsync(zkeyFilePath);
-        if (!fileInfo.exists) {
-            console.log("Zkey file not found, downloading...");
+        const expectedSizeBytes = 6000000; // Approx 6MB, adjust if needed
+
+        if (!fileInfo.exists || (fileInfo.exists && fileInfo.size < expectedSizeBytes)) {
+            if (fileInfo.exists) {
+                 console.log(`Existing zkey file size (${fileInfo.size}) is less than expected (${expectedSizeBytes}), deleting and re-downloading...`);
+                 await FileSystem.deleteAsync(zkeyFilePath, { idempotent: true });
+            } else {
+                console.log("Zkey file not found, downloading...");
+            }
+
             try {
                 const remoteUrl =
                     "https://github.com/zkmopro/mopro/raw/ae88356e680ac4d785183267d6147167fabe071c/test-vectors/circom/multiplier2_final.zkey";
@@ -33,12 +41,13 @@ export default function HomeScreen() {
                     zkeyFilePath
                 );
                 console.log("Zkey file downloaded to:", downloadResult.uri);
+                 // Optional: Add a check here for downloadResult.size if needed
             } catch (error) {
                 console.error("Failed to download zkey file:", error);
                 throw new Error("Failed to download zkey file.");
             }
         } else {
-             console.log("Zkey file already exists:", zkeyFilePath);
+             console.log(`Zkey file already exists and is valid size (${fileInfo.size} bytes):`, zkeyFilePath);
         }
     }
 
@@ -54,8 +63,8 @@ export default function HomeScreen() {
             await ensureZkeyExists();
 
             const circuitInputs = {
-                a: a,
-                b: b,
+                a: [a],
+                b: [b],
             };
 
             const res = await MoproReactNativePackage.generateCircomProof(
@@ -67,7 +76,7 @@ export default function HomeScreen() {
                 throw new Error("Native module did not return a valid proof object.");
             }
 
-            const proofResult = res as CircomProofResult;
+            const proofResult = res as unknown as CircomProofResult;
 
             console.log("Proof generated:", proofResult);
             setProof(JSON.stringify(proofResult.proof, null, 2));
