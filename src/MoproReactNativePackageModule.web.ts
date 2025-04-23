@@ -1,6 +1,6 @@
 import { registerWebModule, NativeModule } from 'expo';
 
-import { MoproReactNativePackageModuleEvents } from './MoproReactNativePackage.types';
+import { MoproReactNativePackageModuleEvents, CircomProofResult } from './MoproReactNativePackage.types';
 
 class MoproReactNativePackageModule extends NativeModule<MoproReactNativePackageModuleEvents> {
   PI = Math.PI;
@@ -11,6 +11,9 @@ class MoproReactNativePackageModule extends NativeModule<MoproReactNativePackage
     return 'Hello world! 👋';
   }
   generateCircomProof(zkeyPath: string, circuitInputs: string) {
+    throw new Error('Not implemented on web');
+  }
+  verifyProof(zkeyPath: string, proofResult: CircomProofResult) {
     throw new Error('Not implemented on web');
   }
 }

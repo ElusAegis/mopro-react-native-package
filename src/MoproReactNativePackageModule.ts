@@ -1,12 +1,16 @@
 import { NativeModule, requireNativeModule } from 'expo';
 
-import { MoproReactNativePackageModuleEvents } from './MoproReactNativePackage.types';
-import { Result } from './MoproReactNativePackage.types';
+import {
+  MoproReactNativePackageModuleEvents,
+  Result,
+  CircomProofResult,
+} from './MoproReactNativePackage.types';
 
 declare class MoproReactNativePackageModule extends NativeModule<MoproReactNativePackageModuleEvents> {
   PI: number;
   hello(): string;
   generateCircomProof(zkeyPath: string, circuitInputs: string): Result;
+  verifyProof(zkeyPath: string, proofResult: CircomProofResult): Promise<boolean>;
   setValueAsync(value: string): Promise<void>;
 }
 
