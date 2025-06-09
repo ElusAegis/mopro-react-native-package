@@ -65,15 +65,27 @@ cd example
 
 ### iOS
 
-To run on a connected iOS device:
+To run on a connected iOS simulator:
 
 ```sh
 npm run ios:device
 ```
 
+To run on a connected iOS device:
+
+```sh
+npm run ios
+```
+
 ### Android
 
-To run on Android:
+Set the `ANDROID_HOME` environment variable.
+
+```sh
+export ANDROID_HOME=~/Library/Android/sdk/
+```
+
+To run on Android emulator/device (if connected):
 
 ```sh
 npm run android
@@ -121,6 +133,14 @@ npm run android
     npm run ios:device
     ```
 - Run on Android emulator/device (if connected)
+  Set the `ANDROID_HOME` environment variable.
+
+    ```sh
+    export ANDROID_HOME=~/Library/Android/sdk/
+    ```
+
+    Run on Android emulator/device (if connected)
+
     ```sh
     npm run android
     ```
